@@ -7,7 +7,7 @@ def get_postcode(db: Session, postcode: str):
 
 
 def get_data_on_postcode(db: Session, postcode: str):
-    return db.query(App.model.Address.id, App.model.Address.outcode, App.model.Address.incode,
+    return db.query(App.model.Address.outcode, App.model.Address.incode,
                     App.model.Address.addresskey,
                     App.model.Address.locality, App.model.Address.thoroughfarekey,
                     App.model.Address.thoroughfaredescriptorkey,
@@ -18,8 +18,8 @@ def get_data_on_postcode(db: Session, postcode: str):
                     App.model.Address.organisationkey,
                     App.model.Address.postcodetype, App.model.Address.concatenationindicator,
                     App.model.Address.deliverypointsuffix,
-                    App.model.Address.smalluserorganisationinidicator,
-                    App.model.Address.poboxnumber, App.model.Address.fullpostcode).filter(App.model.Address.fullpostcode == postcode.upper()).one()
+                    App.model.Address.smalluserorganisationindicator,
+                    App.model.Address.poboxnumber, App.model.Address.fullpostcode).filter(App.model.Address.fullpostcode == postcode.upper()).first()
 
 
 def get_postcode_from_outcode(db: Session, o: str):

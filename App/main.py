@@ -37,12 +37,22 @@ def get_timestamp():
 
 
 # Write to csv file
-def log_to_csv(term: str, postcode_list: list, date: str):
-    with open('App/results.csv', 'a', encoding='UTF-8', newline='') as file:
+def log_partial_to_csv(term: str, postcode_list: list, date: str):
+    with open('results.csv', 'a', encoding='UTF-8', newline='') as file:
 
         writer = csv.writer(file)
-        writer.writerow([term, len(postcode_list), date])
+        writer.writerow([term.upper(), len(postcode_list), date])
         print(f'{term}, {len(postcode_list)}, {date}')
+
+
+# Write to csv file
+def log_full_to_csv(postcode: str, date: str):
+    with open('results.csv', 'a', encoding='UTF-8', newline='') as file:
+
+        writer = csv.writer(file)
+        writer.writerow([postcode.upper(), 1, date])
+        print(f'{postcode}, 1, {date}')
+
 
 
 # Serves a base html file where you can access the different APIs
@@ -57,8 +67,11 @@ async def full_postcode_info(full_postcode: str, db: Session = Depends(get_db)):
     results = crud.get_data_on_postcode(db, full_postcode)
 
     json_data = jsonable_encoder(results)
+    request_time = get_timestamp()
+
     if json_data is None:
         raise HTTPException(status_code=404, detail='Postcode not found')
+    log_full_to_csv(full_postcode, request_time)
     return json_data
 
 
@@ -90,5 +103,5 @@ async def autocomplete(term: Optional[str], db: Session = Depends(get_db)):
     if json_data is None:
         raise HTTPException(status_code=404, detail='Postcode not found')
     # Log to csv
-    log_to_csv(term, postcode_list, request_time)
+    log_partial_to_csv(term, postcode_list, request_time)
     return postcode_list

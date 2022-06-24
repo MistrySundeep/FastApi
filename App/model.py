@@ -3,7 +3,7 @@ from App.db import Base, engine
 
 
 class Address(Base):
-    __tablename__ = 'Address'
+    __tablename__ = 'address'
 
     id = Column(Integer, primary_key=True)
     outcode = Column(String)
@@ -22,7 +22,7 @@ class Address(Base):
     postcodetype = Column(String)
     concatenationindicator = Column(String)
     deliverypointsuffix = Column(String)
-    smalluserorganisationinidicator = Column(String)
+    smalluserorganisationindicator = Column(String)
     poboxnumber = Column(String)
     fullpostcode = Column(String)
 

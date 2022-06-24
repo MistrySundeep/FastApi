@@ -11,22 +11,37 @@
     <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js"></script>
 
     <script src="{{ url_for('static', path='js/autocomplete.js') }}"></script>
+    <style>
+        .wrapper{
+            padding: 20px;
+            margin: 15px 0;
+        }
+
+        textarea{
+            font-size: 20px;
+            width: 50%;
+        }
+    </style>
 </head>
 <body>
     <h1>THIS IS THE HOMEPAGE</h1>
 
     <form action="/fullpostcode/">
-        <input class="form-control me-2" name="term" id="autocomplete" type="search" placeholder="Search.." aria-label="Search">
+        <input name="term" id="autocomplete" type="search" placeholder="Search.." aria-label="Search">
     </form>
     <button id="btn">Search</button>
 
-    <table>
-        {% for result in json_data %}
-        <tr>
-            <td>{{result}}</td>
-        </tr>
-        {% endfor %}
-    </table>
+    <div class="wrapper">
+        <textarea id="full_postcode_data" col="10" rows="20"></textarea>
+    </div>
+
+<!--    <table>-->
+<!--        {% for result in results %}-->
+<!--        <tr>-->
+<!--            <td>{{result}}</td>-->
+<!--        </tr>-->
+<!--        {% endfor %}-->
+<!--    </table>-->
 
 <script>
 
@@ -34,13 +49,14 @@
         $("#btn").click(function (){
             let postcode = document.getElementById('autocomplete').value;
             console.log(encodeURIComponent(postcode));
-            let url = '/fullpostcode/' + postcode;
-
+        let url = '/fullpostcode/' + postcode;
             $.get(url, function (data, status){
                 console.log(`${data}`)
                 console.log(`${status}`)
+                $.each(data, function (key, value){
+                    $("#full_postcode_data").append(key + ': ' + value + '\n');
+                });
             });
-            window.location.href= url;
         });
     });
 
