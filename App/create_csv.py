@@ -5,7 +5,7 @@ from datetime import datetime
 def test_csv():
 
     # Open the file in write mode
-    with open('results.csv', 'a', encoding='UTF-8') as file:
+    with open('results.csv', 'w', encoding='UTF-8') as file:
         # Create a csv writer
         writer = csv.writer(file)
 

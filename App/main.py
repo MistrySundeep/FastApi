@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Depends, HTTPException, Request
+from fastapi import FastAPI, Depends, HTTPException, Request, Form
 from sqlalchemy.orm import Session
 import App.crud as crud
 from App.db import SessionLocal, engine
@@ -50,6 +50,16 @@ def log_to_csv(term: str, postcode_list: list, date: str):
 @app.get("/")
 async def serve_index(request: Request):
     return templates.TemplateResponse('index.html', {'request': request})
+
+
+@app.get("/fullpostcode/{full_postcode}")
+async def full_postcode_info(full_postcode: str, db: Session = Depends(get_db)):
+    results = crud.get_data_on_postcode(db, full_postcode)
+
+    json_data = jsonable_encoder(results)
+    if json_data is None:
+        raise HTTPException(status_code=404, detail='Postcode not found')
+    return json_data
 
 
 # Finds a postcode based on a full postcode given by the user, returned as JSON

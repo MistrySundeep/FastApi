@@ -15,19 +15,35 @@
 <body>
     <h1>THIS IS THE HOMEPAGE</h1>
 
-    <form action="/address/outcode/">
+    <form action="/fullpostcode/">
         <input class="form-control me-2" name="term" id="autocomplete" type="search" placeholder="Search.." aria-label="Search">
-
     </form>
+    <button id="btn">Search</button>
 
     <table>
-        {% for result in results %}
+        {% for result in json_data %}
         <tr>
             <td>{{result}}</td>
         </tr>
         {% endfor %}
     </table>
 
+<script>
 
+    $(document).ready(function (){
+        $("#btn").click(function (){
+            let postcode = document.getElementById('autocomplete').value;
+            console.log(encodeURIComponent(postcode));
+            let url = '/fullpostcode/' + postcode;
+
+            $.get(url, function (data, status){
+                console.log(`${data}`)
+                console.log(`${status}`)
+            });
+            window.location.href= url;
+        });
+    });
+
+</script>
 </body>
 </html>
