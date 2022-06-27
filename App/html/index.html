@@ -32,19 +32,12 @@
     <button id="btn">Search</button>
 
     <div class="wrapper">
-        <textarea id="full_postcode_data" col="10" rows="20"></textarea>
+        <label for="full_postcode_data"></label><textarea id="full_postcode_data" col="10" rows="20"></textarea>
     </div>
 
-<!--    <table>-->
-<!--        {% for result in results %}-->
-<!--        <tr>-->
-<!--            <td>{{result}}</td>-->
-<!--        </tr>-->
-<!--        {% endfor %}-->
-<!--    </table>-->
 
 <script>
-
+    // Waits till the DOM  is ready for JS to be run
     $(document).ready(function (){
         $("#btn").click(function (){
             let postcode = document.getElementById('autocomplete').value;

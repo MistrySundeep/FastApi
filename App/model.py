@@ -1,4 +1,5 @@
 from sqlalchemy import Float, Column, String, Integer
+
 from App.db import Base, engine
 
 
@@ -25,6 +26,65 @@ class Address(Base):
     smalluserorganisationindicator = Column(String)
     poboxnumber = Column(String)
     fullpostcode = Column(String)
+
+
+class BuildingNames(Base):
+    __tablename__ = 'buildingnames'
+
+    buldingnamekey = Column(String, primary_key=True)
+    buildingname = Column(String)
+
+
+class Localities(Base):
+    __tablename__ = 'localities'
+
+    localitykey = Column(String, primary_key=True)
+    filler1 = Column(String)
+    filler2 = Column(String)
+    posttown = Column(String)
+    dependentlocality = Column(String)
+    doubledependentlocality = Column(String)
+
+
+class MailSort(Base):
+    __tablename__ = 'mailsort'
+
+    outcode = Column(String, primary_key=True)
+    sector = Column(String)
+    residualidentifier = Column(String)
+    directwithinresidualindicator = Column(String)
+
+
+class Organisations(Base):
+    __tablename__ = 'organisations'
+
+    organisationkey = Column(String, primary_key=True)
+    postcodetype = Column(String)
+    organisationame = Column(String)
+    departmentname = Column(String)
+    filler = Column(String)
+
+
+class SubBuildingNames(Base):
+    __tablename__ = 'subbuildingnames'
+
+    subbuildingnamekey = Column(String, primary_key=True)
+    subbuildingname = Column(String)
+
+
+class Thoroughfares(Base):
+    __tablename__ = 'thoroughfares'
+
+    thoroughfarekey = Column(String, primary_key=True)
+    thoroughfarename = Column(String)
+
+
+class ThoroughfaresDescriptor(Base):
+    __tablename__ = 'thoroughfaredescriptor'
+
+    thoroughfaredescriptorkey = Column(String, primary_key=True)
+    thoroughfaredescriptor = Column(String)
+    approvedabbreviation = Column(String)
 
 
 Base.metadata.create_all(engine)

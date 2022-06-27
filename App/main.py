@@ -39,7 +39,6 @@ def get_timestamp():
 # Write to csv file
 def log_partial_to_csv(term: str, postcode_list: list, date: str):
     with open('results.csv', 'a', encoding='UTF-8', newline='') as file:
-
         writer = csv.writer(file)
         writer.writerow([term.upper(), len(postcode_list), date])
         print(f'{term}, {len(postcode_list)}, {date}')
@@ -48,11 +47,9 @@ def log_partial_to_csv(term: str, postcode_list: list, date: str):
 # Write to csv file
 def log_full_to_csv(postcode: str, date: str):
     with open('results.csv', 'a', encoding='UTF-8', newline='') as file:
-
         writer = csv.writer(file)
         writer.writerow([postcode.upper(), 1, date])
         print(f'{postcode}, 1, {date}')
-
 
 
 # Serves a base html file where you can access the different APIs
@@ -66,13 +63,13 @@ async def serve_index(request: Request):
 async def full_postcode_info(full_postcode: str, db: Session = Depends(get_db)):
     results = crud.get_data_on_postcode(db, full_postcode)
 
-    json_data = jsonable_encoder(results)
+    # json_data = jsonable_encoder(results)
     request_time = get_timestamp()
 
-    if json_data is None:
+    if results is None:
         raise HTTPException(status_code=404, detail='Postcode not found')
     log_full_to_csv(full_postcode, request_time)
-    return json_data
+    return results
 
 
 # Finds a postcode based on a full postcode given by the user, returned as JSON
