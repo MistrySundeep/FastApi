@@ -31,7 +31,7 @@ class Address(Base):
 class BuildingNames(Base):
     __tablename__ = 'buildingnames'
 
-    buldingnamekey = Column(String, primary_key=True)
+    buildingnamekey = Column(String, primary_key=True)
     buildingname = Column(String)
 
 
@@ -79,8 +79,8 @@ class Thoroughfares(Base):
     thoroughfarename = Column(String)
 
 
-class ThoroughfaresDescriptor(Base):
-    __tablename__ = 'thoroughfaredescriptor'
+class ThoroughfareDescriptor(Base):
+    __tablename__ = 'thoroughfaredescriptors'
 
     thoroughfaredescriptorkey = Column(String, primary_key=True)
     thoroughfaredescriptor = Column(String)

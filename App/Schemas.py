@@ -26,7 +26,7 @@ class AddressBase(BaseModel):
 
 
 class BuildingNameBase(BaseModel):
-    buldingnamekey: str
+    buildingnamekey: str
     buildingname: str
 
 

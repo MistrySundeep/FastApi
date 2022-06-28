@@ -28,6 +28,9 @@
 
     <form action="/fullpostcode/">
         <input name="term" id="autocomplete" type="search" placeholder="Search.." aria-label="Search">
+        <select name="results" id="results">
+            <option value="test">Test</option>
+        </select>
     </form>
     <button id="btn">Search</button>
 
@@ -39,13 +42,16 @@
 <script>
     // Waits till the DOM  is ready for JS to be run
     $(document).ready(function (){
+        // When the search button is clicked the fucntion is run
         $("#btn").click(function (){
+            // Get postcode value from input field
             let postcode = document.getElementById('autocomplete').value;
-            console.log(encodeURIComponent(postcode));
+        // Holds the URL for the get API call
         let url = '/fullpostcode/' + postcode;
+            // Runs get request with users postcode
             $.get(url, function (data, status){
-                console.log(`${data}`)
                 console.log(`${status}`)
+                // Loops through the returned object and outputs the gathered data
                 $.each(data, function (key, value){
                     $("#full_postcode_data").append(key + ': ' + value + '\n');
                 });
