@@ -17,31 +17,34 @@
             margin: 15px 0;
         }
 
-        textarea{
-            font-size: 20px;
-            width: 50%;
-        }
     </style>
 </head>
 <body>
     <h1>PAF RESULTS API HOMEPAGE</h1>
-
-    <form action="/fullpostcode/">
+    <div class="wrapper">
+        <form action="/fullpostcode/">
         <input name="term" id="autocomplete" type="search" placeholder="Search.." aria-label="Search">
     </form>
     <button id="btn">Search</button>
+    </div>
 
     <div class="wrapper">
-        <label for="full_postcode_data"></label><textarea id="full_postcode_data" col="10" rows="20"></textarea>
+        <label for="full_postcode_data"></label>
+        <select id="full_postcode_data">
+            <option value="" selected hidden>Choose Address</option>
+        </select>
     </div>
 
 <script>
     // Waits till the DOM  is ready for JS to be run
     $(document).ready(function (){
-        // When the search button is clicked the fucntion is run
+        $('#full_postcode_data').hide();
+        // When the search button is clicked the function is run
         $("#btn").click(function (){
             // Get postcode value from input field
+            // $('#full_postcode_data').val('');
             let postcode = document.getElementById('autocomplete').value;
+            $("option[id='added_option']").remove();
         // Holds the URL for the get API call
         let url = '/address/' + postcode;
             // Runs get request with users postcode
@@ -49,8 +52,13 @@
                 console.log(`${status}`)
                 // Loops through the returned object and outputs the gathered data
                 $.each(data, function (key,value){
-                    $("#full_postcode_data").append(value + '\n');
+                    $("#full_postcode_data").append($('<option/>', {
+                        id: 'added_option',
+                        value: value,
+                        text: value
+                    }));
                     console.log(key + ': ' + value + '\n')
+                    $('#full_postcode_data').show();
                 });
             });
         });

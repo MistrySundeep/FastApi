@@ -35,7 +35,7 @@ def get_data_on_postcode(db: Session, postcode: str):
 
 def get_postcode_from_outcode(db: Session, o: str):
     return db.query(model.Address).filter(model.Address.fullpostcode.like(f'{o.upper()}%')).limit(
-        10).all()
+        20).all()
 
     # % at the start: anything before it but must have term
     # % at the end: has to start with this

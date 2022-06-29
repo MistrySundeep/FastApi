@@ -64,17 +64,21 @@ def format_address(address):
         tmp_dict = address[i]
         # Looping through the vals in tmp_dict and adding them to a new list
         pulled_address = [tmp_dict[v] for v in tmp_dict if type(tmp_dict[v]) != type(null)]
-        # Check to see if the first item (building number) starts with 0
+        # Pull the building number to a tmp variable
         tmp_building_num = pulled_address[0]
+        # Check to see if the first item (building number) starts with 0000, if it does delete it
         if tmp_building_num.startswith('0000'):
             pulled_address.pop(0)
+        # Check to see it the first item (building number) starts with 000
         elif tmp_building_num.startswith('000'):
             pulled_address[0] = tmp_building_num[3:]
+        # Check to see it the first item (building number) starts with 00
         elif tmp_building_num.startswith('00'):
             pulled_address[0] = tmp_building_num[2:]
+        # Check to see it the first item (building number) starts with 0
         elif tmp_building_num.startswith('0'):
             pulled_address[0] = tmp_building_num[1:]
-        # Concatenate string to make a single address string
+        # Concatenate string to make a single address string, if value is none ignore it
         res = ' '.join(filter(lambda x: x if x is not None else '', pulled_address))
         # Insert new string into final_list
         final_address.insert(i, res)
@@ -94,12 +98,15 @@ async def serve_index(request: Request):
 
 
 @app.get("/fullpostcode/{full_postcode}")
-async def full_postcode_info(full_postcode: str, db: Session = Depends(get_db)):
+def full_postcode_info(full_postcode: str, db: Session = Depends(get_db)):
+    # Runs query and returns results
     results = crud.get_data_on_postcode(db, full_postcode)
-
+    # Convert results to a JSON object
     json_data = jsonable_encoder(results)
+    # Get current time for request
     request_time = get_timestamp()
 
+    # Check if the JSON object is empty, if it is return 404 error. Otherwise log datetime, postcode and results and return JSON object
     if json_data is None:
         raise HTTPException(status_code=404, detail='Postcode not found')
     log_full_to_csv(full_postcode, request_time)
@@ -108,12 +115,10 @@ async def full_postcode_info(full_postcode: str, db: Session = Depends(get_db)):
 
 # Finds a postcode based on a full postcode given by the user, returned as JSON
 @app.get("/address/{postcode}")
-async def find_address(postcode: str, db: Session = Depends(get_db)):
+def find_address(postcode: str, db: Session = Depends(get_db)):
     results = crud.get_potential_address(db, postcode)
     json_data = jsonable_encoder(results)
     results_list = format_address(json_data)
-    for i in results_list:
-        print(i)
 
     if results_list is None:
         raise HTTPException(status_code=404, detail='Postcode not found')
@@ -122,7 +127,7 @@ async def find_address(postcode: str, db: Session = Depends(get_db)):
 
 # Autocomplete for the text field on the home.html, overrides jQuery func
 @app.get("/address/outcode/")
-async def autocomplete(term: Optional[str], db: Session = Depends(get_db)):
+def autocomplete(term: Optional[str], db: Session = Depends(get_db)):
     results = crud.get_postcode_from_outcode(db, term)
 
     request_time = get_timestamp()
