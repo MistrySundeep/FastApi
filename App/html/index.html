@@ -9,7 +9,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js"></script>
-
+    <script src="{{ url_for('static', path='js/script.js') }}"></script>
     <script src="{{ url_for('static', path='js/autocomplete.js') }}"></script>
     <style>
         .wrapper{
@@ -34,36 +34,5 @@
             <option value="" selected hidden>Choose Address</option>
         </select>
     </div>
-
-<script>
-    // Waits till the DOM  is ready for JS to be run
-    $(document).ready(function (){
-        $('#full_postcode_data').hide();
-        // When the search button is clicked the function is run
-        $("#btn").click(function (){
-            // Get postcode value from input field
-            // $('#full_postcode_data').val('');
-            let postcode = document.getElementById('autocomplete').value;
-            $("option[id='added_option']").remove();
-        // Holds the URL for the get API call
-        let url = '/address/' + postcode;
-            // Runs get request with users postcode
-            $.get(url, function (data, status){
-                console.log(`${status}`)
-                // Loops through the returned object and outputs the gathered data
-                $.each(data, function (key,value){
-                    $("#full_postcode_data").append($('<option/>', {
-                        id: 'added_option',
-                        value: value,
-                        text: value
-                    }));
-                    console.log(key + ': ' + value + '\n')
-                    $('#full_postcode_data').show();
-                });
-            });
-        });
-    });
-
-</script>
 </body>
 </html>
