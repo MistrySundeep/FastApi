@@ -24,20 +24,16 @@
     </style>
 </head>
 <body>
-    <h1>THIS IS THE HOMEPAGE</h1>
+    <h1>PAF RESULTS API HOMEPAGE</h1>
 
     <form action="/fullpostcode/">
         <input name="term" id="autocomplete" type="search" placeholder="Search.." aria-label="Search">
-        <select name="results" id="results">
-            <option value="test">Test</option>
-        </select>
     </form>
     <button id="btn">Search</button>
 
     <div class="wrapper">
         <label for="full_postcode_data"></label><textarea id="full_postcode_data" col="10" rows="20"></textarea>
     </div>
-
 
 <script>
     // Waits till the DOM  is ready for JS to be run
@@ -47,13 +43,14 @@
             // Get postcode value from input field
             let postcode = document.getElementById('autocomplete').value;
         // Holds the URL for the get API call
-        let url = '/fullpostcode/' + postcode;
+        let url = '/address/' + postcode;
             // Runs get request with users postcode
             $.get(url, function (data, status){
                 console.log(`${status}`)
                 // Loops through the returned object and outputs the gathered data
-                $.each(data, function (key, value){
-                    $("#full_postcode_data").append(key + ': ' + value + '\n');
+                $.each(data, function (key,value){
+                    $("#full_postcode_data").append(value + '\n');
+                    console.log(key + ': ' + value + '\n')
                 });
             });
         });
