@@ -6,6 +6,7 @@ from fastapi import FastAPI, Depends, HTTPException, Request
 from fastapi.encoders import jsonable_encoder
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
+
 from sqlalchemy import null
 from sqlalchemy.orm import Session
 
@@ -98,7 +99,7 @@ async def serve_index(request: Request):
 
 
 @app.get("/fullpostcode/{full_postcode}")
-def full_postcode_info(full_postcode: str, db: Session = Depends(get_db)):
+async def full_postcode_info(full_postcode: str, db: Session = Depends(get_db)):
     # Runs query and returns results
     results = crud.get_data_on_postcode(db, full_postcode)
     # Convert results to a JSON object
@@ -128,8 +129,8 @@ def find_address(postcode: str, db: Session = Depends(get_db)):
 
 # Autocomplete for the text field on the home.html, overrides jQuery func
 @app.get("/address/outcode/")
-def autocomplete(term: Optional[str], db: Session = Depends(get_db)):
-    results = crud.get_postcode_from_outcode(db, term)
+async def autocomplete(term: Optional[str], db: Session = Depends(get_db)):
+    results = crud.autocomplete(db, term)
 
     request_time = get_timestamp()
     print(f'TIME OF REQUEST: {request_time}')
@@ -138,8 +139,10 @@ def autocomplete(term: Optional[str], db: Session = Depends(get_db)):
 
     postcode_list = [i['fullpostcode'] for i in json_data]
 
-    if json_data is None:
+    if not postcode_list:
         raise HTTPException(status_code=404, detail='Postcode not found')
     # Log to csv
     log_partial_to_csv(term, postcode_list, request_time)
     return postcode_list
+
+

@@ -34,7 +34,7 @@ def get_data_on_postcode(db: Session, postcode: str):
                                                                          model.SubBuildingNames.subbuildingname).distinct().first()
 
 
-def get_postcode_from_outcode(db: Session, o: str):
+def autocomplete(db: Session, o: str):
     return db.query(model.Address).filter(model.Address.fullpostcode.like(f'{o.upper()}%')).limit(20).all()
 
     # % at the start: anything before it but must have term
