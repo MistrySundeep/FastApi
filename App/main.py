@@ -106,7 +106,8 @@ def full_postcode_info(full_postcode: str, db: Session = Depends(get_db)):
     # Get current time for request
     request_time = get_timestamp()
 
-    # Check if the JSON object is empty, if it is return 404 error. Otherwise log datetime, postcode and results and return JSON object
+    # Check if the JSON object is empty, if it is return 404 error. Otherwise, log datetime, postcode and results and
+    # return JSON object
     if json_data is None:
         raise HTTPException(status_code=404, detail='Postcode not found')
     log_full_to_csv(full_postcode, request_time)
@@ -120,7 +121,7 @@ def find_address(postcode: str, db: Session = Depends(get_db)):
     json_data = jsonable_encoder(results)
     results_list = format_address(json_data)
 
-    if results_list is None:
+    if results_list is None or len(results_list) == 0:
         raise HTTPException(status_code=404, detail='Postcode not found')
     return results_list
 

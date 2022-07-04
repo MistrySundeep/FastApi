@@ -1,7 +1,8 @@
 $( function() {
     $( "#autocomplete" ).autocomplete({
         source: "/address/outcode/",
-        minLength: 2
+        minLength: 2,
+        delay: 500
     });
 });
 

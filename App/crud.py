@@ -3,9 +3,10 @@ from sqlalchemy.orm import Session
 import App.model as model
 
 
-# Used for testing purposes, will be removed at a later point
-def get_postcode(db: Session, postcode: str):
-    return db.query(model.Address).filter(model.Address.fullpostcode == postcode.upper()).all()
+#
+# # Used for testing purposes, will be removed at a later point
+# def get_postcode(db: Session, postcode: str):
+#     return db.query(model.Address).filter(model.Address.fullpostcode == postcode.upper()).all()
 
 
 # Returns all data on the chosen postcode from the results of autocomplete
@@ -34,8 +35,7 @@ def get_data_on_postcode(db: Session, postcode: str):
 
 
 def get_postcode_from_outcode(db: Session, o: str):
-    return db.query(model.Address).filter(model.Address.fullpostcode.like(f'{o.upper()}%')).limit(
-        20).all()
+    return db.query(model.Address).filter(model.Address.fullpostcode.like(f'{o.upper()}%')).limit(20).all()
 
     # % at the start: anything before it but must have term
     # % at the end: has to start with this

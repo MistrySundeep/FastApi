@@ -2,10 +2,11 @@
 $(document).ready(function (){
     $('#full_postcode_data').hide();
     // When the search button is clicked the function is run
-    $("#btn").click(function (){
+    $("#autocomplete").on("autocompleteselect", function (event, ui){
         // Get postcode value from input field
-        // $('#full_postcode_data').val('');
+        document.getElementById('autocomplete').value = ui.item.value;
         let postcode = document.getElementById('autocomplete').value;
+        console.log(postcode);
         $("option[id='added_option']").remove();
     // Holds the URL for the get API call
     let url = '/address/' + postcode;
