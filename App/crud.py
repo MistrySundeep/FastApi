@@ -1,12 +1,7 @@
+from fastapi import Request
 from sqlalchemy.orm import Session
 
 import App.model as model
-
-
-#
-# # Used for testing purposes, will be removed at a later point
-# def get_postcode(db: Session, postcode: str):
-#     return db.query(model.Address).filter(model.Address.fullpostcode == postcode.upper()).all()
 
 
 # Returns all data on the chosen postcode from the results of autocomplete
@@ -56,3 +51,16 @@ def get_potential_address(db: Session, postcode: str):
                     model.Address.thoroughfaredescriptorkey == model.ThoroughfareDescriptor.thoroughfaredescriptorkey),
                    (model.BuildingNames, model.Address.buildingnamekey == model.BuildingNames.buildingnamekey)).filter(
         model.Address.fullpostcode == postcode.upper()).distinct().all()
+
+
+def authentication(request: Request, db: Session):
+    # Get email/key from request header
+    email = request.headers.get('Auth-Email')
+    key = request.headers.get('Auth-Key')
+    # Do a check to see if those pieces of information exist
+    auth_obj = db.query(model.APIUsers.authemail, model.APIUsers.authkey, model.APIUsers.enabled).filter(
+        model.APIUsers.authemail == email).first()
+    # Then check to see if enabled == True (return this part)
+    if auth_obj[0] == email and auth_obj[1] == key and auth_obj[2] is True:
+        return True
+

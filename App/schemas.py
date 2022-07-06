@@ -70,6 +70,14 @@ class ThoroughfareDescriptorBase(BaseModel):
     approvedabbreviation: str
 
 
+class APIUsersBase(BaseModel):
+    userid: int
+    companyid: int
+    authemail: str
+    authkey: str
+    enabled: bool
+
+
 # Class Configs
 class Address(AddressBase):
     class Config:
@@ -107,5 +115,10 @@ class ThoroughfareDescriptor(ThoroughfareDescriptorBase):
 
 
 class Thoroughfare(ThoroughfaresBase):
+    class Config:
+        orm_mode = True
+
+
+class APIUsers(APIUsersBase):
     class Config:
         orm_mode = True

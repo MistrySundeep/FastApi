@@ -32,19 +32,25 @@ def get_db():
         db.close()
 
 
-# Gets a copy of the master keys/emails for validation
-API_KEYS, EMAILS = hf.get_master_info()
-
-
 # Serves a base html file where you can access the different APIs
 # @app.get("/") tells FastAPI that the func below handles request at path "/" using GET
 @app.get("/")
-async def serve_index(request: Request):
+async def serve_index(request: Request, db: Session = Depends(get_db)):
+    # Runs a validation check to see if the auth headers are valid
+    flag = crud.authentication(request, db)
+
+    if not flag:
+        raise HTTPException(status.HTTP_403_FORBIDDEN, detail='Forbidden')
     return templates.TemplateResponse('index.html', {'request': request})
 
 
 @app.get("/fullpostcode/{full_postcode}")
-async def full_postcode_info(full_postcode: str, db: Session = Depends(get_db)):
+async def full_postcode_info(request: Request, full_postcode: str, db: Session = Depends(get_db)):
+    # Runs a validation check to see if the auth headers are valid
+    flag = crud.authentication(request, db)
+
+    if not flag:
+        raise HTTPException(status.HTTP_403_FORBIDDEN, detail='Forbidden')
     # Runs query and returns results
     results = crud.get_data_on_postcode(db, full_postcode)
     # Convert results to a JSON object
@@ -62,25 +68,25 @@ async def full_postcode_info(full_postcode: str, db: Session = Depends(get_db)):
 
 # Finds a postcode based on a full postcode given by the user, returned as JSON
 @app.get("/address/{postcode}")
-def find_address(postcode: str, db: Session = Depends(get_db)):
+def find_address(request: Request, postcode: str, db: Session = Depends(get_db)):
+    # Runs a validation check to see if the auth headers are valid
+    flag = crud.authentication(request, db)
+    if not flag:
+        raise HTTPException(status.HTTP_403_FORBIDDEN, detail='Forbidden')
+
     results = crud.get_potential_address(db, postcode)
     json_data = jsonable_encoder(results)
     results_list = hf.format_address(json_data)
 
     if results_list is None or len(results_list) == 0:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='Postcode not found')
+
     return results_list
 
 
 # Autocomplete for the text field on the home.html, overrides jQuery func
 @app.get("/address/outcode/")
-async def autocomplete(request: Request, term: Optional[str], db: Session = Depends(get_db)):
-    # Runs a validation check to see if the auth headers are valid
-    email = request.headers.get('Auth-Email')
-    key = request.headers.get('Auth-Key')
-
-    if key not in API_KEYS or email not in EMAILS:
-        raise HTTPException(status.HTTP_403_FORBIDDEN, detail='Forbidden')
+async def autocomplete(term: Optional[str], db: Session = Depends(get_db)):
     results = crud.autocomplete(db, term)
 
     request_time = hf.get_timestamp()

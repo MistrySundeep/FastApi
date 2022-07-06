@@ -1,5 +1,4 @@
-from sqlalchemy import Float, Column, String, Integer
-
+from sqlalchemy import Float, Column, String, Integer, Boolean
 from App.db import Base, engine
 
 
@@ -85,6 +84,16 @@ class ThoroughfareDescriptor(Base):
     thoroughfaredescriptorkey = Column(String, primary_key=True)
     thoroughfaredescriptor = Column(String)
     approvedabbreviation = Column(String)
+
+
+class APIUsers(Base):
+    __tablename__ = 'apiusers'
+
+    userid = Column(Integer, primary_key=True)
+    companyid = Column(Integer)
+    authemail = Column(String)
+    authkey = Column(String)
+    enabled = Column(Boolean)
 
 
 Base.metadata.create_all(engine)

@@ -61,17 +61,3 @@ def format_address(address):
 
     return final_address
 
-
-def get_master_info():
-    MASTER_API_KEYS = []
-    MASTER_AUTH_EMAILS = []
-
-    with open('App/config.txt', 'r', encoding='UTF-8', newline='') as file:
-        line = file.read().split(',')
-        for l in line:
-            if l.__contains__('@'):
-                MASTER_AUTH_EMAILS.append(l)
-            else:
-                MASTER_API_KEYS.append(l)
-
-    return MASTER_API_KEYS, MASTER_AUTH_EMAILS
