@@ -1,7 +1,6 @@
 import csv
 from datetime import datetime
 from sqlalchemy import null
-from fastapi import status, HTTPException, Request
 
 
 # Used to create a timestamp when a query is made, for now prints to terminal
@@ -13,7 +12,7 @@ def get_timestamp():
 
 # Write to csv file
 def log_partial_to_csv(term: str, postcode_list: list, date: str):
-    with open('results.csv', 'a', encoding='UTF-8', newline='') as file:
+    with open('App/results.csv', 'a', encoding='UTF-8', newline='') as file:
         writer = csv.writer(file)
         writer.writerow([term.upper(), len(postcode_list), date])
         print(f'{term}, {len(postcode_list)}, {date}')
@@ -21,7 +20,7 @@ def log_partial_to_csv(term: str, postcode_list: list, date: str):
 
 # Write to csv file
 def log_full_to_csv(postcode: str, date: str):
-    with open('results.csv', 'a', encoding='UTF-8', newline='') as file:
+    with open('App/results.csv', 'a', encoding='UTF-8', newline='') as file:
         writer = csv.writer(file)
         writer.writerow([postcode.upper(), 1, date])
         print(f'{postcode}, 1, {date}')

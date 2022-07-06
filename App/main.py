@@ -62,7 +62,7 @@ async def full_postcode_info(request: Request, full_postcode: str, db: Session =
     # return JSON object
     if json_data is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='Postcode not found')
-    hf.log_full_to_csv(full_postcode, request_time)
+    hf.log_full_to_csv(full_postcode.upper(), request_time)
     return json_data
 
 
