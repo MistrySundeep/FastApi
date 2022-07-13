@@ -37,10 +37,10 @@ def get_db():
 @app.get("/")
 async def serve_index(request: Request, db: Session = Depends(get_db)):
     # Runs a validation check to see if the auth headers are valid
-    flag = crud.authentication(request, db)
-
-    if not flag:
-        raise HTTPException(status.HTTP_403_FORBIDDEN, detail='Forbidden')
+    # flag = crud.authentication(request, db)
+    #
+    # if not flag:
+    #     raise HTTPException(status.HTTP_403_FORBIDDEN, detail='Forbidden')
     return templates.TemplateResponse('index.html', {'request': request})
 
 
@@ -86,7 +86,12 @@ def find_address(request: Request, postcode: str, db: Session = Depends(get_db))
 
 # Autocomplete for the text field on the home.html, overrides jQuery func
 @app.get("/address/outcode/")
-async def autocomplete(term: Optional[str], db: Session = Depends(get_db)):
+async def autocomplete(request: Request, term: Optional[str], db: Session = Depends(get_db)):
+    # Runs a validation check to see if the auth headers are valid
+    flag = crud.authentication(request, db)
+
+    if not flag:
+        raise HTTPException(status.HTTP_403_FORBIDDEN, detail='Forbidden')
     results = crud.autocomplete(db, term)
 
     request_time = hf.get_timestamp()
