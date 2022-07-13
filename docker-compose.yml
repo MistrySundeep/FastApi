@@ -8,10 +8,8 @@ services:
       - .:/app
     ports:
       - "8000:8000"
-    environment:
-      - DATABASE_URL=postgresql://postgres:ipr1smData@10.0.17.59/AddressData
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=ipr1smData
-      - POSTGRES_DB=AddressData
+    env_file:
+      - ./config.env
+
 networks:
   paf-network:
